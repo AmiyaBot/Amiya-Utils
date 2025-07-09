@@ -18,7 +18,10 @@ def create_dir(path: str, is_file: bool = False):
 def support_gbk_zip(zip_file: zipfile.ZipFile):
     name_to_info = zip_file.NameToInfo
     for name, info in name_to_info.copy().items():
-        real_name = name.encode('cp437').decode('gbk')
+        try:
+            real_name = name.encode('cp437').decode('gbk')
+        except (UnicodeEncodeError, UnicodeDecodeError):
+            pass
         if real_name != name:
             info.filename = real_name
             del name_to_info[name]
